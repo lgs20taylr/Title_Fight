@@ -122,7 +122,7 @@ def main():
     file.write(str(epl))
   for match in echfixtures:
     simmatch(match,echfixtures[match],ech)
-  with open("ecl.txt", mode = "w") as file:
+  with open("ech.txt", mode = "w") as file:
     file.write(str(ech))
 if __name__ == "__main__":
   main()
