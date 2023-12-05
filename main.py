@@ -74,14 +74,18 @@ def simmatch(team1,team2,league):
   score1 = {}
   score2 = {}
   for i in range(1,10):
-    opquality = random.randint(0,200)
+    opquality = random.randint(0,180)
     chance1 = random.randint(0,league[team1]["rating"])
     chance2 = random.randint(0,league[team1]["rating"])
     minutes = random.randint((i*10)-10, i*10)
     if chance1 > chance2 and chance1 >= opquality:
       score1[minutes] = 1
+      league[team1]["gf"] += 1
+      league[team2]["ga"] += 1
     elif chance2 > chance1 and chance2 >= opquality:
       score2[minutes] = 1
+      league[team2]["gf"] += 1
+      league[team1]["ga"] += 1
   if len(score1) > len(score2):
     result1 = "W"
     league[team1]["points"] += 3
@@ -95,12 +99,15 @@ def simmatch(team1,team2,league):
     league[team1]["points"] += 1
     result2 = "D"
     league[team2]["points"] += 1
+  league[team1]["gd"] = league[team1]["gf"] - league[team1]["ga"]
+  league[team2]["gd"] = league[team2]["gf"] - league[team2]["ga"]
   print(f"{result1} {team1} {len(score1)} - {len(score2)} {team2} {result2}")
   return league
 def printtable(table):
+  print("Team Name|Points|Played|Goal Difference|Goals For|Goals Against")
   for i in table:
-    print(i,table[i]["points"],table[i]["played"])
-def generatefixtures(league,length):
+    print(i,table[i]["points"],table[i]["played"],table[i]["gd"],table[i]["gf"],table[i]["ga"],table[i]["rating"])
+def generatefixtures(league):
   fixtures = {}
   bowl = list(league.keys())
   for weeks in league:
@@ -111,18 +118,37 @@ def generatefixtures(league,length):
       bowl.remove(awayteam)
       fixtures[hometeam] = awayteam
   return fixtures
+def weekbyweek(lname,lstr):
+  lfixtures = {}
+  seasonlength = {
+    "epl":18,
+    "ech":18,
+  }
+  for week in range(seasonlength[lstr]):
+    lfixtures[week] = generatefixtures(lname)
+  return lfixtures
+def updaterating(league):
+  for team in league:
+    league[team]["rating"] += league[team]["gd"]
+  return league
 def main():
   global epl
   global ech
-  eplfixtures = generatefixtures(epl,1)
-  echfixtures = generatefixtures(ech,1)
-  for match in eplfixtures:
-    simmatch(match,eplfixtures[match],epl)
-  with open("epl.txt", mode = "w") as file:
-    file.write(str(epl))
-  for match in echfixtures:
-    simmatch(match,echfixtures[match],ech)
-  with open("ech.txt", mode = "w") as file:
-    file.write(str(ech))
+  eplfixtures = weekbyweek(epl,"epl")
+  echfixtures = weekbyweek(ech,"ech")
+  for i in eplfixtures:
+    for match in eplfixtures[i]:
+      simmatch(match,eplfixtures[i][match],epl)
+    with open("epl.txt", mode = "w") as file:
+      file.write(str(epl))
+  for i in echfixtures:
+    for match in echfixtures[i]:
+      simmatch(match,echfixtures[i][match],ech)
+    with open("ech.txt", mode = "w") as file:
+      file.write(str(ech))
+  epl = updaterating(epl)
+  ech = updaterating(ech)
+  printtable(epl)
+  printtable(ech)
 if __name__ == "__main__":
   main()
