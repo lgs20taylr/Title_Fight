@@ -131,24 +131,33 @@ def updaterating(league):
   for team in league:
     league[team]["rating"] += league[team]["gd"]
   return league
+def resetleague(league):
+  for i in league:
+    league[i]["points"], league[i]["played"], league[i]["won"], league[i]["lost"], league[i]["drawn"],  league[i]["gd"], league[i]["gf"], league[i]["ga"] = 0,0,0,0,0,0,0,0
+  return league
 def main():
   global epl
   global ech
-  eplfixtures = weekbyweek(epl,"epl")
-  echfixtures = weekbyweek(ech,"ech")
-  for i in eplfixtures:
-    for match in eplfixtures[i]:
-      simmatch(match,eplfixtures[i][match],epl)
-    with open("epl.txt", mode = "w") as file:
-      file.write(str(epl))
-  for i in echfixtures:
-    for match in echfixtures[i]:
-      simmatch(match,echfixtures[i][match],ech)
-    with open("ech.txt", mode = "w") as file:
-      file.write(str(ech))
-  epl = updaterating(epl)
-  ech = updaterating(ech)
-  printtable(epl)
-  printtable(ech)
+  runitback = "y"
+  while runitback.lower() == "y":
+    epl = resetleague(epl)
+    ech = resetleague(ech)
+    eplfixtures = weekbyweek(epl,"epl")
+    echfixtures = weekbyweek(ech,"ech")
+    for i in eplfixtures:
+      for match in eplfixtures[i]:
+        simmatch(match,eplfixtures[i][match],epl)
+      with open("epl.txt", mode = "w") as file:
+        file.write(str(epl))
+    for i in echfixtures:
+      for match in echfixtures[i]:
+        simmatch(match,echfixtures[i][match],ech)
+      with open("ech.txt", mode = "w") as file:
+        file.write(str(ech))
+    epl = updaterating(epl)
+    ech = updaterating(ech)
+    printtable(epl)
+    printtable(ech)
+    runitback = input("Simulate another season?")
 if __name__ == "__main__":
   main()
