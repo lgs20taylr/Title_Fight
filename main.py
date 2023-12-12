@@ -81,7 +81,7 @@ def simmatch(team1,team2,league,spectating):
     opquality = random.randint(0,180)
     chance1 = random.randint(0,league[team1]["rating"])
     chance2 = random.randint(0,league[team2]["rating"])
-    minutes = random.randint((i*10)-10, i*10)
+    minutes = random.randint((i*10)-9, i*10)
     if chance1 > chance2 and chance1 >= opquality:
       score1[minutes] = 1
       league[team1]["gf"] += 1
