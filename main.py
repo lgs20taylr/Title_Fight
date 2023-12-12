@@ -55,6 +55,7 @@ ech = {
 "Sunderland":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":69},
 }
 
+
 # def initleague(league):
 #   table = {}
 #   for i in league:
@@ -68,24 +69,31 @@ ech = {
 #     ech = initleague(initech)
 #   else:
 #     epl = initleague(initepl)
-def simmatch(team1,team2,league):
+def simmatch(team1,team2,league,spectating):
+  watching = team1 in spectating or team2 in spectating
   league[team1]["played"] += 1
   league[team2]["played"] += 1
   score1 = {}
   score2 = {}
+  if watching == True:
+    print(f"Attending Matchday: {team1} vs {team2}.\n")
   for i in range(1,10):
     opquality = random.randint(0,180)
     chance1 = random.randint(0,league[team1]["rating"])
-    chance2 = random.randint(0,league[team1]["rating"])
+    chance2 = random.randint(0,league[team2]["rating"])
     minutes = random.randint((i*10)-10, i*10)
     if chance1 > chance2 and chance1 >= opquality:
       score1[minutes] = 1
       league[team1]["gf"] += 1
       league[team2]["ga"] += 1
+      if watching == True:
+        print(f"[{minutes}] GOAL! {team1} scores!\n {team1} {len(score1)} - {len(score2)} {team2}")
     elif chance2 > chance1 and chance2 >= opquality:
       score2[minutes] = 1
       league[team2]["gf"] += 1
       league[team1]["ga"] += 1
+      if watching == True:
+        print(f"[{minutes}] GOAL! {team2} scores!\n {team1} {len(score1)} - {len(score2)} {team2}")
   if len(score1) > len(score2):
     result1 = "W"
     league[team1]["points"] += 3
@@ -101,7 +109,7 @@ def simmatch(team1,team2,league):
     league[team2]["points"] += 1
   league[team1]["gd"] = league[team1]["gf"] - league[team1]["ga"]
   league[team2]["gd"] = league[team2]["gf"] - league[team2]["ga"]
-  print(f"{result1} {team1} {len(score1)} - {len(score2)} {team2} {result2}")
+  print(f"\n{result1} {team1} {len(score1)} - {len(score2)} {team2} {result2}\n------------------------------------------")
   return league
 def printtable(table):
   print("Team Name|Points|Played|Goal Difference|Goals For|Goals Against")
@@ -121,7 +129,7 @@ def generatefixtures(league):
 def weekbyweek(lname,lstr):
   lfixtures = {}
   seasonlength = {
-    "epl":18,
+    "epl":36,
     "ech":18,
   }
   for week in range(seasonlength[lstr]):
@@ -129,7 +137,9 @@ def weekbyweek(lname,lstr):
   return lfixtures
 def updaterating(league):
   for team in league:
-    league[team]["rating"] += league[team]["gd"]
+    league[team]["rating"] += round((league[team]["gd"]/4) + (league[team]["won"]/2))
+    if league[team]["rating"] < 30:
+      league[team]["rating"] = 30
   return league
 def resetleague(league):
   for i in league:
@@ -138,20 +148,25 @@ def resetleague(league):
 def main():
   global epl
   global ech
+  morespec = "y"
   runitback = "y"
   while runitback.lower() == "y":
     epl = resetleague(epl)
     ech = resetleague(ech)
     eplfixtures = weekbyweek(epl,"epl")
     echfixtures = weekbyweek(ech,"ech")
+    spectating = []
+    while morespec.lower() == "y":
+      spectating.append(input("Input a team to spectate."))
+      morespec = input("Add another team?")
     for i in eplfixtures:
       for match in eplfixtures[i]:
-        simmatch(match,eplfixtures[i][match],epl)
+        simmatch(match,eplfixtures[i][match],epl,spectating)
       with open("epl.txt", mode = "w") as file:
         file.write(str(epl))
     for i in echfixtures:
       for match in echfixtures[i]:
-        simmatch(match,echfixtures[i][match],ech)
+        simmatch(match,echfixtures[i][match],ech,spectating)
       with open("ech.txt", mode = "w") as file:
         file.write(str(ech))
     epl = updaterating(epl)
