@@ -3,6 +3,7 @@
 
 import random
 import time
+import json
 
 # initepl = {
 #   "Arsenal":83,
@@ -44,22 +45,36 @@ leagues = {
             "Newcastle United":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":80},
             "Luton Town":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":72},
             "Burnley":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":74},
+            "Sheffield United":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":73},
+            "Wolverhampton Wonderers":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":74},
             },
-  "ech":{
-  "Leicster City":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":75},
-  "Ipswitch Town":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":69},
-  "West Bromwitch Albion":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":71},
-  "Leeds United":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":73},
-  "Southhampton":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":73},
-  "Hull City":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":70},
-  "Preston North End":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":70},
-  "Cardiff City":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":70},
-  "Middlesborough":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":71},
-  "Sunderland":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":69},
-  },},
+    "ech":{
+    "Leicster City":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":75},
+    "Ipswitch Town":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":69},
+    "West Bromwitch Albion":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":71},
+    "Leeds United":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":73},
+    "Southhampton":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":73},
+    "Hull City":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":70},
+    "Preston North End":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":70},
+    "Cardiff City":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":70},
+    "Middlesborough":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":71},
+    "Sunderland":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":69},
+    "Blackburn Rovers":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":69},
+    "Watford":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":70},
+    },},
 }
 
-
+commentary = {
+  "miss":[],
+  "goal":[],
+  "end":[],
+  "start":[],
+}
+def initcom():
+  global commentary
+  for i in commentary:
+    with open((i+".txt"), mode = "r") as file:
+      commentary[i] = file.readlines()
 timings = {
   "matchintervals":1,
   "attmatchend":3,
@@ -86,7 +101,8 @@ def simmatch(team1,team2,league,spectating):
   score1 = {}
   score2 = {}
   if watching:
-    print(f"Attending Matchday: {team1} vs {team2}.\n")
+    commentpick = random.choice(commentary["start"])
+    print(f"Attending Matchday: {team1} vs {team2}.\n\n{commentpick}")
   for i in range(1,10):
     if watching:
       time.sleep(timings["matchintervals"])
@@ -98,14 +114,22 @@ def simmatch(team1,team2,league,spectating):
       score1[minutes] = 1
       league[team1]["gf"] += 1
       league[team2]["ga"] += 1
-      if watching == True:
-        print(f"[{minutes}] GOAL! {team1} scores!\n {team1} {len(score1)} - {len(score2)} {team2}")
+      if watching:
+        commentpick = random.choice(commentary["goal"])
+        print(f"[{minutes}] GOAL! {team1} scores! {commentpick}\n {team1} {len(score1)} - {len(score2)} {team2}")
     elif chance2 > chance1 and chance2 >= opquality:
       score2[minutes] = 1
       league[team2]["gf"] += 1
       league[team1]["ga"] += 1
       if watching:
-        print(f"[{minutes}] GOAL! {team2} scores!\n {team1} {len(score1)} - {len(score2)} {team2}")
+        commentpick = random.choice(commentary["goal"])
+        print(f"[{minutes}] GOAL! {team2} scores! {commentpick}\n {team1} {len(score1)} - {len(score2)} {team2}")
+    elif chance1 > chance2 and chance1 < opquality and watching and random.randint(0,3) == 1:
+      commentpick = random.choice(commentary["miss"])
+      print(f"[{minutes}] {commentpick} ({team1})")
+    elif chance2 > chance1 and chance2 < opquality and watching and random.randint(0,3) == 1:
+      commentpick = random.choice(commentary["miss"])
+      print(f"[{minutes}] {commentpick} ({team2})")
   if len(score1) > len(score2):
     result1 = "W"
     league[team1]["points"] += 3
@@ -121,6 +145,9 @@ def simmatch(team1,team2,league,spectating):
     league[team2]["points"] += 1
   league[team1]["gd"] = league[team1]["gf"] - league[team1]["ga"]
   league[team2]["gd"] = league[team2]["gf"] - league[team2]["ga"]
+  commentpick = random.choice(commentary["end"])
+  if watching:
+    print(commentpick)
   print(f"\n{result1} {team1} {len(score1)} - {len(score2)} {team2} {result2}\n------------------------------------------")
   if watching:
     time.sleep(timings["attmatchend"])
@@ -128,7 +155,7 @@ def simmatch(team1,team2,league,spectating):
     time.sleep(timings["normatchend"])
   return league
 def printtable(table):
-  print("Team Name|Points|Played|Goal Difference|Goals For|Goals Against")
+  print("Team Name|Points|Played|Goal Difference|Goals For|Goals Against|Rating|")
   for i in table:
     print(i,table[i]["points"],table[i]["played"],table[i]["gd"],table[i]["gf"],table[i]["ga"],table[i]["rating"])
 def generatefixtures(league):
@@ -145,8 +172,8 @@ def generatefixtures(league):
 def weekbyweek(lname,lstr):
   lfixtures = {}
   seasonlength = {
-    "epl":9,
-    "ech":9,
+    "epl":24,
+    "ech":24,
   }
   for week in range(seasonlength[lstr]):
     lfixtures[week] = generatefixtures(lname)
@@ -196,6 +223,7 @@ def main():
   ech = leagues["england"]["ech"]
   morespec = "y"
   runitback = "y"
+  initcom()
   while runitback.lower() == "y":
     epl = resetleague(epl)
     ech = resetleague(ech)
@@ -217,11 +245,13 @@ def main():
         file.write(str(ech))
     epl = updaterating(epl)
     ech = updaterating(ech)
+    print("###############################\nEnglish Premier League")
     printtable(epl)
+    print("###############################\nEFL Championship")
     printtable(ech)
     relegated = findbottom(epl)
     promoted = findtop(ech)
-    epl, ech = updown(relegated, promoted, epl, ech)
+    ech, epl = updown(relegated, promoted, epl, ech)
     runitback = input("Simulate another season?")
 if __name__ == "__main__":
   main()
