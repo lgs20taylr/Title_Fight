@@ -1,0 +1,6 @@
+Erling Haaland|89,93,66,80,45,88,A,
+Kevin De Bruyne|72,88,94,87,65,78,M,
+Rúben Dias|62,39,66,69,89,87,D,
+Reece James|80,72,83,82,82,81,D,
+Christopher Nkunku|82,81,83,88,62,67,M,
+Enzo Fernández|73,73,81,80,75,79,D,
