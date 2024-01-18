@@ -14,6 +14,10 @@ for i in plist:
       pfacts.append(j)
   pfacts.pop(-1)
   database[player[0]] = pfacts
+# "":{
+#   "record":[],
+#   "squad":["", "", "",]
+# },
 epl = {
   "Manchester City":{
     "record":[],
@@ -22,6 +26,54 @@ epl = {
   "Chelsea":{
     "record":[],
     "squad":["Christopher Nkunku", "Enzo Fernández", "Reece James",]
+  },
+  "Arsenal":{
+    "record":[]
+    "squad":["Bukayo Saka", "Declan Rice", "William Saliba",]
+  },
+  "Liverpool":{
+    "record":[],
+    "squad":["Mohamed Salah", "Alexis Mac Alister", "Virgil van Dijk",]
+  },
+  "Aston Villa":{
+    "record":[],
+    "squad":["Ollie Watkins", "Boubacar Kamara", "Pau Torres",]
+  },
+  "Tottenham Hotspur":{
+    "record":[],
+    "squad":["Heung-Min Son", "Giovani Lo Celso", "Cristian Romero",]
+  },
+  "":{
+    "record":[],
+    "squad":["", "", "",]
+  },
+  "":{
+    "record":[],
+    "squad":["", "", "",]
+  },
+  "":{
+    "record":[],
+    "squad":["", "", "",]
+  },
+  "":{
+    "record":[],
+    "squad":["", "", "",]
+  },
+  "":{
+    "record":[],
+    "squad":["", "", "",]
+  },
+  "":{
+    "record":[],
+    "squad":["", "", "",]
+  },
+  "":{
+    "record":[],
+    "squad":["", "", "",]
+  },
+  "":{
+    "record":[],
+    "squad":["", "", "",]
   },
 }
 
@@ -33,8 +85,8 @@ def teamplayer(league, team):
   return retrieveplayerdata(random.choice(league[team]["squad"]))
 def chalp(stat):
   return random.randint(stat, 140)
-player1, p1stats = teamplayer(epl, "Manchester City")
-player2, p2stats = teamplayer(epl, "Chelsea")
+player1, p1stats = teamplayer(epl, "Liverpool")
+player2, p2stats = teamplayer(epl, "Arsenal")
 goals1 = 0
 goals2 = 0
 pac = 0
@@ -87,7 +139,7 @@ def simchal(t1hasball, goals1, goals2):
   return goals1, goals2
 for i in range(5):
   print(simchal(t1hasball, goals1, goals2))
-  player1, p1stats = teamplayer(epl, "Manchester City")
-  player2, p2stats = teamplayer(epl, "Chelsea")
+  player1, p1stats = teamplayer(epl, "Liverpool")
+  player2, p2stats = teamplayer(epl, "Arsenal")
   pos1 = p1stats[6]
   pos2 = p2stats[6]
