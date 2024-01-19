@@ -3,7 +3,6 @@
 
 import random
 import time
-import json
 
 # initepl = {
 #   "Arsenal":83,
@@ -33,34 +32,20 @@ import json
 
 leagues = {
   "england":{"epl":{
-            "Arsenal":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":83},
-            "Chelsea":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":80},
-            "Manchester City":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":85},
-            "Liverpool":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":83},
-            "Aston Villa":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":80},
-            "Tottenham Hotspur":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":81},
-            "Manchester United":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":82},
-            "Brighton & Hove Albion":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":77},
-            "West Ham United":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":78},
-            "Newcastle United":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":80},
-            "Luton Town":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":72},
-            "Burnley":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":74},
-            "Sheffield United":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":73},
-            "Wolverhampton Wonderers":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":74},
+            "Arsenal":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"squad":["Bukayo Saka", "Declan Rice", "William Saliba"]},
+            "Chelsea":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"squad":["Christopher Nkunku", "Enzo Fernández", "Reece James",]},
+            "Manchester City":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"squad":["Erling Haaland", "Kevin De Bruyne", "Rúben Dias",]},
+            "Liverpool":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"squad":["Mohamed Salah", "Alexis Mac Allister", "Virgil van Dijk",]},
+            "Tottenham Hotspur":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"squad":["Heung-Min Son", "Giovani Lo Celso", "Cristian Romero",]},
+            "Manchester United":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"squad":["Rasmus Højlund", "Bruno Fernandes", "Harry Maguire",]},
             },
     "ech":{
-    "Leicster City":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":75},
-    "Ipswitch Town":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":69},
-    "West Bromwitch Albion":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":71},
-    "Leeds United":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":73},
-    "Southhampton":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":73},
-    "Hull City":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":70},
-    "Preston North End":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":70},
-    "Cardiff City":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":70},
-    "Middlesborough":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":71},
-    "Sunderland":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":69},
-    "Blackburn Rovers":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":69},
-    "Watford":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"rating":70},
+    "Leicster City":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"squad":["Jamie Vardy","Wilfred Ndidi","Ricardo Pereira"]},
+    "Ipswitch Town":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"squad":["George Hirst","Conor Chaplin","Leif Davis",]},
+    "West Bromwitch Albion":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"squad":["Josh Maja","John Swift","Darnell Furlong",]},
+    "Leeds United":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"squad":["Georginio Rutter","Glen Kamara","Joe Rondon"]},
+    "Southhampton":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"squad":["Ché Adams","Carlos Alcaraz","Kyle Walker-Peters",]},
+    "Hull City":{"points":0,"played":0,"won":0,"drawn":0,"lost":0,"gf":0,"ga":0,"gd":0,"squad":["Liam Delap","Jean Seri","Sean McLoughlin"]},
     },},
 }
 
@@ -81,19 +66,7 @@ timings = {
   "normatchend":0.05,
 }
 
-# def initleague(league):
-#   table = {}
-#   for i in league:
-#     table[i] = basedict
-#     table[i]["rating"] = league[i]
-#   return table
-# def pickleague(leaguechoice):
-#   global epl, ech
-#   if leaguechoice == "y":
-#     epl = initleague(initepl)
-#     ech = initleague(initech)
-#   else:
-#     epl = initleague(initepl)
+
 def simmatch(team1,team2,league,spectating):
   watching = team1 in spectating or team2 in spectating
   league[team1]["played"] += 1
@@ -161,7 +134,7 @@ def printtable(table):
 def generatefixtures(league):
   fixtures = {}
   bowl = list(league.keys())
-  for weeks in league:
+  for _weeks in league:
     while bowl:
       hometeam = random.choice(bowl)
       bowl.remove(hometeam)
