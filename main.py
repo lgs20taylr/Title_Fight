@@ -28,12 +28,12 @@ epl = {
     "squad":["Christopher Nkunku", "Enzo Fernández", "Reece James",]
   },
   "Arsenal":{
-    "record":[]
+    "record":[],
     "squad":["Bukayo Saka", "Declan Rice", "William Saliba",]
   },
   "Liverpool":{
     "record":[],
-    "squad":["Mohamed Salah", "Alexis Mac Alister", "Virgil van Dijk",]
+    "squad":["Mohamed Salah", "Alexis Mac Allister", "Virgil van Dijk",]
   },
   "Aston Villa":{
     "record":[],
@@ -43,37 +43,17 @@ epl = {
     "record":[],
     "squad":["Heung-Min Son", "Giovani Lo Celso", "Cristian Romero",]
   },
-  "":{
+  "Manchester United":{
     "record":[],
-    "squad":["", "", "",]
+    "squad":["Rasmus Højlund", "Bruno Fernandes", "Harry Maguire",]
   },
-  "":{
+  "Brighton & Hove Albion":{
     "record":[],
-    "squad":["", "", "",]
+    "squad":["Kaoru Mitoma", "Lewis Dunk", "Evan Ferguson",]
   },
-  "":{
+  "West Ham United":{
     "record":[],
-    "squad":["", "", "",]
-  },
-  "":{
-    "record":[],
-    "squad":["", "", "",]
-  },
-  "":{
-    "record":[],
-    "squad":["", "", "",]
-  },
-  "":{
-    "record":[],
-    "squad":["", "", "",]
-  },
-  "":{
-    "record":[],
-    "squad":["", "", "",]
-  },
-  "":{
-    "record":[],
-    "squad":["", "", "",]
+    "squad":["Jarod Bowen", "Edson Álvarez", "Nayef Aguerd",]
   },
 }
 
@@ -82,44 +62,10 @@ def retrieveplayerdata(player):
     if player in i:
       return i, database[i]
 def teamplayer(league, team):
-  return retrieveplayerdata(random.choice(league[team]["squad"]))
+  if league[team]["squad"]:
+    return retrieveplayerdata(random.choice(league[team]["squad"]))
 def chalp(stat):
   return random.randint(stat, 140)
-player1, p1stats = teamplayer(epl, "Liverpool")
-player2, p2stats = teamplayer(epl, "Arsenal")
-goals1 = 0
-goals2 = 0
-pac = 0
-sho = 1
-pas = 2
-dri = 3
-dfn = 4
-phy = 5
-pos1 = p1stats[6]
-pos2 = p2stats[6]
-t1hasball = True
-if pos1 == "M" or pos2 == "M":
-  test1 = chalp(p1stats[phy])
-  test2 = chalp(p2stats[phy])
-  print("M vs M")
-elif pos1 == "D" and pos2 == "A":
-  test1 = chalp(p1stats[dfn])
-  if random.randint(0,1) == 0:
-    test2 = chalp(p2stats[dri])
-  else:
-    test2 = chalp(p2stats[sho])
-  print("D vs A")
-elif pos1 == "A" and pos2 == "D":
-  test2 = chalp(p2stats[dfn])
-  if random.randint(0,1) == 0:
-    test1 = chalp(p1stats[dri])
-  else:
-    test1 = chalp(p1stats[sho])
-  print("A vs D")
-else:
-  test1 = chalp(p1stats[pac])
-  test2 = chalp(p2stats[pac])
-  print("A vs A")
 def simchal(t1hasball, goals1, goals2):
   print(test1, test2)
   if test1 > test2:
@@ -137,9 +83,25 @@ def simchal(t1hasball, goals1, goals2):
   else:
     print("Equal")
   return goals1, goals2
-for i in range(5):
-  print(simchal(t1hasball, goals1, goals2))
-  player1, p1stats = teamplayer(epl, "Liverpool")
-  player2, p2stats = teamplayer(epl, "Arsenal")
+def simmatch():
+  pac = 0
+  sho = 1
+  dri = 3
+  dfn = 4
+  phy = 5
+  player1, p1stats = teamplayer(epl, "Manchester City")
+  player2, p2stats = teamplayer(epl, "Chelsea")
   pos1 = p1stats[6]
   pos2 = p2stats[6]
+  if pos1 == "M" or pos2 == "M":
+    chalp(p1stats[phy])
+    chalp(p2stats[phy])
+  elif pos1 == "D" and pos2 == "A":
+    chalp(p1stats[dfn])
+    chalp(p2stats[dri]) if random.randint(0, 1) == 0 else chalp(p2stats[sho])
+  elif pos1 == "A" and pos2 == "D":
+    chalp(p2stats[dfn])
+    chalp(p1stats[dri]) if random.randint(0, 1) == 0 else chalp(p1stats[sho])
+  else:
+    chalp(p1stats[pac])
+    chalp(p2stats[pac])
