@@ -128,6 +128,7 @@ def simmatch(team1,team2,league,spectating):
   score2 = {}
   goal1 = False
   goal2 = False
+  msq1, msq2 = pickmatchsquad(league[team1]), pickmatchsquad(league[team2])
   t1hasball = random.randint(0, 1) == 0
   if watching:
     commentpick = random.choice(commentary["start"])
@@ -137,8 +138,8 @@ def simmatch(team1,team2,league,spectating):
       time.sleep(timings["matchintervals"]["goal"])
     elif watching:
       time.sleep(timings["matchintervals"]["normal"])
-    player1 = random.choice(league[team1]["squad"])
-    player2 = random.choice(league[team2]["squad"])
+    player1 = random.choice(msq1)
+    player2 = random.choice(msq2)
     p1stats = retrieveplayerdata(player1)
     p2stats = retrieveplayerdata(player2)
     pos1 = p1stats[6]
@@ -241,30 +242,36 @@ def calcavgrat(league, team):
 def radj():
   return random.randint(-3,3)
 def updaterating(league):
-  agebonus = {16:8,17:6,18:5,19:5,20:5,21:4,22:3,23:2,24:1,25:1,26:0,27:0,28:0,29:0,30:-1,31:-2,32:-3,33:-4,34:-5,35:-6,36:-7,37:-8,38:-9,39:-10,40:-12}
   global database
   for team in league:
     rchan = round((league[team]["gd"]/4) + (league[team]["points"]/2))
     for player in league[team]["squad"]:
-      position = database[player][6]
-      age = database[player][8]
-      if position == "A":
-        database[player][0] += rchan + radj() + agebonus[age]
-        database[player][1] += rchan + radj() + agebonus[age]
-        database[player][3] += rchan + radj() + agebonus[age]
-      elif position == "M":
-        database[player][2] += rchan + radj() + agebonus[age]
-        database[player][5] += rchan + radj() + agebonus[age]
-      elif position == "D":
-        database[player][4] += rchan + radj() + agebonus[age]
-        database[player][5] += rchan + radj() + agebonus[age]
-      database[player][8] += 1
-      for stat in range(len(database[player])-3):
-        if database[player][stat] < 10:
-          database[player][stat] = 10
-        elif database[player][stat] >= 120:
-          database[player][stat] = 120
+      ratadj(player,rchan)
   return league
+def ratadj(player,rchan=0):
+  agebonus = {14:8,15:8,16:8,17:6,18:5,19:5,20:5,21:4,22:3,23:2,24:1,25:1,26:0,27:0,28:0,29:0,30:-1,31:-2,32:-3,33:-4,34:-5,35:-6,36:-7,37:-8,38:-9,39:-10,40:-12}
+  position = database[player][6]
+  age = database[player][8]
+  if position == "A":
+    database[player][0] += rchan + radj() + agebonus[age]
+    database[player][1] += rchan + radj() + agebonus[age]
+    database[player][3] += rchan + radj() + agebonus[age]
+  elif position == "M":
+    database[player][2] += rchan + radj() + agebonus[age]
+    database[player][5] += rchan + radj() + agebonus[age]
+  elif position == "D":
+    database[player][4] += rchan + radj() + agebonus[age]
+    database[player][5] += rchan + radj() + agebonus[age]
+  database[player][8] += 1
+  for stat in range(len(database[player])-3):
+    if database[player][stat] < 10:
+      database[player][stat] = 10
+    elif database[player][stat] >= 120:
+      database[player][stat] = 120
+def updatefas(epl,ech):
+  for player in database:
+    if database[player][7] not in epl and database[player][7] not in ech:
+      ratadj(player,random.randint(-5,5))
 def resetleague(league):
   for i in league:
     league[i]["points"], league[i]["played"], league[i]["won"], league[i]["lost"], league[i]["drawn"],  league[i]["gd"], league[i]["gf"], league[i]["ga"] = 0,0,0,0,0,0,0,0
@@ -359,17 +366,27 @@ def main():
     relegated = findbottom(epl)
     promoted = findtop(ech)
     ech, epl = updown(relegated, promoted, epl, ech)
-    # printdatabase(database)
+    for _ in range(5):
+      new, stats = regen()
+      database[new] = stats
+    updatefas(epl,ech)
+    printdatabase(database)
     maketrans = bool(input("Make transfers?").lower() == "y")
     while maketrans:
       print("Transfer Window Open")
       handletrans(input("Input Origin Team or FA if free agent"), input("Input Player"), input("Input Destination Team"), epl, ech)
       maketrans = input("Make another transfer?").lower() == "y"
-    printdatabase(database)
     runitback = input("Simulate another season?")
 def printdatabase(database):
   for i in database:
     print(i, database[i])
+def regen(ythrating=60, team="Free Agent"):
+  firstnames = ['John', 'Noah', 'George', 'Oliver', 'Muhammad', 'Arthur', 'Leo', 'Harry', 'Oscar', 'Henry', 'Theodore', 'Erling', 'Kevin', 'Ruben', 'Reece', 'Christopher', 'Enzo', 'Mohamed', 'Alexis', 'Virgil', 'Bukayo', 'Declan', 'William', 'Ollie', 'Boubacar', 'Pau', 'Heung-Min', 'Giovani', 'Cristian', 'Rasmus', 'Bruno', 'Harry', 'Evan', 'Kaoru', 'Lewis', 'Jarrod', 'Edson', 'Nayef', 'Callum', 'Sandro', 'Kieran', 'Elijah', 'Ross', 'Ryan', 'Matheus', 'Mario', 'Nelson', 'Zeki', 'Mike', 'Jordan', 'Cameron', 'Gustavo', 'Anel', 'Jamie', 'Wilfred', 'Ricardo', 'Che', 'Carlos', 'Kyle', 'George', 'Conor', 'Leif', 'Josh', 'John', 'Darnell', 'Georginio', 'Glen', 'Joe', 'Liam', 'Jean', 'Sean', 'Milutin', 'Benjamin', 'Yakou', 'Karlan', 'Mark', 'Emmanuel', 'Hayden', 'Dael', 'Mason', 'Jobe', 'Daniel', 'Jesse', 'Jerome', 'Kylian', 'Ethan', 'Vinicius', 'Henry', 'Big', 'Bad'] 
+  lastnames = ['Smith', 'Jones', 'Williams', 'Taylor', 'Davies', 'Brown', 'Wilson', 'Evans', 'Thomas', 'Johnson', 'Roberts', 'Walker', 'Wright', 'Robinson', 'Thompson', 'White', 'Hughes', 'Edwards', 'Green', 'Lewis', 'Wood', 'Haris', 'Martin', 'Jackson', 'Clarke', 'Haaland', 'de Bruyne', 'Dias', 'James', 'Nkunku', 'Fernandez', 'Salah', 'MacAlister', 'van Dijk', 'Saka', 'Rice', 'Saliba', 'Watkins', 'Kamara', 'Torres', 'Son', 'Celso', 'Romero', 'Hojlund', 'Fernandes', 'Maguire', 'Ferguson', 'Mitoma', 'Dunk', 'Bowen', 'Alvarez', 'Aguerd', 'Wilson', 'Tonali', 'Trippier', 'Adebayo', 'Barkley', 'Giles', 'Cunha', 'Lemina', 'Semedo', 'Amdouni', 'Tresor', 'Beyer', 'Archer', 'Hamer', 'Ahmedhodzic', 'Vardy', 'Ndidi', 'Pereira', 'Adams', 'Alcaraz', 'Walker-Peters', 'Hirst', 'Chaplin', 'Davis', 'Maja', 'Swift', 'Furlong', 'Rutter', 'Rondon', 'Delap', 'Seri', 'McLoughlin', 'Osmajic', 'Whiteman', 'Storey', 'Meite', 'Ahearne-Grant', 'McGuinness', 'Latte', 'Hackney', 'Fry', 'Burstow', 'Bellingham', 'Ballard', 'Lingard', 'Boateng', 'Mbappe', 'Junior', 'Martin', 'Boy', 'Chap', 'Lad', 'Guy']
+  poslist = ["A","M","D",]
+  player = random.choice(firstnames) + " " + random.choice(lastnames)
+  pstats = [random.randint(20,ythrating),random.randint(20,ythrating),random.randint(20,ythrating),random.randint(20,ythrating),random.randint(20,ythrating),random.randint(20,ythrating),random.choice(poslist),team,random.randint(14,21)]
+  return player, pstats
 # initdatabase()
 # for i in database:
 #   if len(database[i]) < 7:
